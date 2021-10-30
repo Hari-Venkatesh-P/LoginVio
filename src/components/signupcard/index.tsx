@@ -11,7 +11,9 @@ import { getItemFromLocalStorage } from "../../utils/storage";
 import { useHistory } from "react-router";
 import { validateReferalToken } from "../../store/api";
 import { AxiosResponse } from "axios";
-
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 export default function SignUpCard() {
   const history = useHistory();
 
@@ -26,6 +28,8 @@ export default function SignUpCard() {
   const email = useSelector((state: any) => state.email);
 
   const isLogin = useSelector((state: any) => state.isLogin);
+
+  const [policyAgree, setPolicyAgree] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (email.length > 0) {
@@ -139,7 +143,7 @@ export default function SignUpCard() {
             }}
           />
         </Box>
-        <Box mt={2} mb={2}>
+        <Box mt={2} mb={1}>
           <Controller
             name="referredCodeKey"
             control={control}
@@ -174,7 +178,20 @@ export default function SignUpCard() {
             }}
           />
         </Box>
-
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={policyAgree}
+                onChange={(e: any) => {
+                  setPolicyAgree(e.target.checked);
+                }}
+                size="small"
+              />
+            }
+            label="Agree to privacy policy"
+          />
+        </Box>
         <div>
           <Button
             type="submit"
@@ -183,6 +200,7 @@ export default function SignUpCard() {
             size="medium"
             style={btnstyle}
             fullWidth
+            disabled={!policyAgree}
           >
             {"Sign Up"}
           </Button>

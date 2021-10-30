@@ -34,8 +34,6 @@ const Dashboard = () => {
     return isLogin != null && isLogin == true && userDetails != null;
   }, [userDetails, isLogin]);
 
-  console.log(showLogout , "showLogout")
-
   return (
     <Grid>
       <CustomAppBar title={APP_NAME} showLogOut={showLogout} />
