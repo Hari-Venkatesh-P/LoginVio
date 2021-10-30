@@ -1,0 +1,175 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { useForm, Controller } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { signupRequest, signupClear } from "../../store/actions/index";
+import { SignUpPayLoad } from "../../store/models";
+import { useMemo } from "react";
+import { getItemFromLocalStorage } from "../../utils/storage";
+
+export default function SignUpCard() {
+  const dispatch = useDispatch();
+
+  const signupFailure = useSelector((state: any) => state.signupFailure);
+
+  const signupSuccess = useSelector((state: any) => state.signupSuccess);
+
+  const signupLoading = useSelector((state: any) => state.signupLoading);
+
+  const email = useSelector((state: any) => state.email);
+
+  const isLogin = useSelector((state: any) => state.isLogin);
+
+  React.useEffect(() => {
+    if (email.length > 0) {
+      setValue("email", email);
+    }
+  }, [email]);
+
+  // Callbacks for Signup User.
+  React.useEffect(() => {
+    if (!signupLoading && signupSuccess && isLogin != null && isLogin == true) {
+      // Route to dashboard
+      console.log("success");
+      dispatch(signupClear());
+    } else if (!signupLoading && signupFailure) {
+      console.log("failed");
+      dispatch(signupClear());
+    }
+  }, [signupLoading, signupSuccess, signupFailure, isLogin]);
+
+  const { handleSubmit, control, getValues, setValue } = useForm();
+
+  const onSubmit = (data: any) => {
+    const payload: SignUpPayLoad = {
+      firstName: data.firstName,
+      email: data.email,
+      referredCodeKey:
+        data.referredCodeKey && data.referredCodeKey.length > 0
+          ? data.referredCodeKey
+          : "MAYANK",
+      agreeToPrivacyPolicy: true,
+      token: getItemFromLocalStorage("token"),
+      source: "WEB_APP",
+    };
+    signupUser(payload);
+  };
+
+  const signupUser = (data: SignUpPayLoad) => {
+    dispatch(signupRequest(data));
+  };
+
+  const btnstyle = { margin: "8px 0" };
+
+  return (
+    <Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box mt={2} mb={2}>
+          <Controller
+            name="firstName"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
+              return (
+                <TextField
+                  label="First name"
+                  variant="outlined"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  size="small"
+                  fullWidth
+                />
+              );
+            }}
+            rules={{
+              required: {
+                value: true,
+                message: "First name required",
+              },
+              minLength: {
+                value: "3",
+                message: "First name invalid",
+              },
+            }}
+          />
+        </Box>
+        <Box mt={2} mb={2}>
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
+              return (
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  size="small"
+                  disabled={value.length > 0}
+                  fullWidth
+                />
+              );
+            }}
+            rules={{
+              required: {
+                value: true,
+                message: "Email required",
+              },
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                message: "Email invalid",
+              },
+            }}
+          />
+        </Box>
+        <Box mt={2} mb={2}>
+          <Controller
+            name="referredCodeKey"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
+              return (
+                <TextField
+                  label="Referred code"
+                  variant="outlined"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  size="small"
+                  fullWidth
+                />
+              );
+            }}
+            rules={{
+              pattern: {
+                value: /^[A-Z0-9]{6}$/i,
+                message: "Referred code invalid",
+              },
+            }}
+          />
+        </Box>
+
+        <div>
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            size="medium"
+            style={btnstyle}
+            fullWidth
+          >
+            {"Sign Up"}
+          </Button>
+        </div>
+      </form>
+    </Box>
+  );
+}
