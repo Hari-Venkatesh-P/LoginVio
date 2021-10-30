@@ -84,7 +84,8 @@ const Login = () => {
       <Grid
         container
         style={{
-          backgroundImage: `url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1")`,
+          height: "91vh",
+          // backgroundImage: `url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1")`,
         }}
       >
         {isDesktopOrLaptop && <Grid item xs={4}></Grid>}
@@ -92,7 +93,6 @@ const Login = () => {
           item
           xs={isDesktopOrLaptop ? 8 : 12}
           style={{
-            height: "91vh",
             justifyContent: "center",
             display: "flex",
             flexDirection: "column",
