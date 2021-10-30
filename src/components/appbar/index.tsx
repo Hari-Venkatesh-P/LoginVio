@@ -46,7 +46,12 @@ export default function CustomAppBar(props: CustomAppBarProps) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          background: "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
+        }}
+      >
         <Box
           sx={{
             minHeight: "4rem",

@@ -18,11 +18,14 @@ import { useMediaQuery } from "react-responsive";
 const Login = () => {
   const location = useLocation();
   const history = useHistory();
-
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
   const paperStyle = {
+    // backgroundColor: "transparent",
     padding: 20,
     // height: "25rem",
-    width: 280,
+    width: isDesktopOrLaptop ? 370 : 280,
     margin: "20px auto",
   };
 
@@ -41,11 +44,7 @@ const Login = () => {
     }
   }, []);
 
-  const isDesktopOrLaptop = useMediaQuery({
-    query: "(min-width: 1224px)",
-  });
-
-  const avatarStyle = { backgroundColor: "#1565c0" };
+  const avatarStyle = { backgroundColor: "#ac42c2" }; //"linear-gradient(90deg, #37297e 10%, #ac42c2 50%)" };
 
   const useStyle = makeStyles({
     indicator: {
@@ -80,12 +79,12 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <CustomAppBar title={APP_NAME} showLogOut={showLogout} />
+      {/* <CustomAppBar title={APP_NAME} showLogOut={showLogout} /> */}
       <Grid
         container
         style={{
-          height: "91vh",
-          // backgroundImage: `url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1")`,
+          height: "100vh",
+          backgroundImage: `url("https://consumerhelpline.gov.in/directsell/assets/img/backgrounds/1.jpg")`,
         }}
       >
         {isDesktopOrLaptop && <Grid item xs={4}></Grid>}
@@ -110,7 +109,13 @@ const Login = () => {
               <Avatar style={avatarStyle}>
                 <LockClockIcon />
               </Avatar>
-              <h2>{APP_NAME}</h2>
+              <h2
+                style={{
+                  color: "#ac42c2",
+                }}
+              >
+                {APP_NAME}
+              </h2>
             </Box>
             {!showSignUpCard ? (
               <VerifyEmailCard />

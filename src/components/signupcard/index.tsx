@@ -13,12 +13,26 @@ import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import ReferralCodeDialog from "../referralcodedialog/index";
+import { styled } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
+const useStyles = makeStyles({
+  root: {
+    background: "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 40,
+    padding: "0 30px",
+  },
+});
 export interface SignUpCardProps {
   inviteReferralCode: string | null;
 }
 export default function SignUpCard(props: SignUpCardProps) {
+  const classes = useStyles();
+
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -78,10 +92,24 @@ export default function SignUpCard(props: SignUpCardProps) {
     dispatch(signupRequest(data));
   };
 
-  const btnstyle = { margin: "8px 0" };
+  const btnstyle = { margin: "8px 0", color: "#FFFFFF" };
+
+  const CustomizedTextField = styled(TextField)({
+    "& label.Mui-focused": {
+      color: "#ac42c2",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#ac42c2",
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#ac42c2",
+      },
+    },
+  });
 
   return (
-    <Box>
+    <Box sx={{ backgroundColor: "transparent" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box mt={2} mb={2}>
           <Controller
@@ -90,7 +118,7 @@ export default function SignUpCard(props: SignUpCardProps) {
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
-                <TextField
+                <CustomizedTextField
                   label="First name"
                   variant="outlined"
                   value={value}
@@ -121,7 +149,7 @@ export default function SignUpCard(props: SignUpCardProps) {
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
-                <TextField
+                <CustomizedTextField
                   label="Email"
                   variant="outlined"
                   value={value}
@@ -165,7 +193,7 @@ export default function SignUpCard(props: SignUpCardProps) {
                 style={{
                   marginLeft: "0.5em",
                   marginRight: "0.5em",
-                  color: "#1565c0",
+                  color: "#37297e",
                 }}
               >
                 {referralCode}
@@ -177,8 +205,8 @@ export default function SignUpCard(props: SignUpCardProps) {
                 }}
                 style={{
                   cursor: "pointer",
-                  color: "#1565c0",
-                  marginBottom : "0.25rem"
+                  color: "#37297e",
+                  marginBottom: "0.25rem",
                 }}
               >
                 {"Change ?"}
@@ -204,9 +232,9 @@ export default function SignUpCard(props: SignUpCardProps) {
                 }}
                 style={{
                   cursor: "pointer",
-                  color: "#1565c0",
+                  color: "#37297e",
                   marginLeft: "1em",
-                  marginBottom : "0.25rem"
+                  marginBottom: "0.25rem",
                 }}
               >
                 {"Enter"}
@@ -223,6 +251,7 @@ export default function SignUpCard(props: SignUpCardProps) {
                   setPolicyAgree(e.target.checked);
                 }}
                 size="small"
+                style={{ color: "#ac42c2" }}
               />
             }
             label="Agree to privacy policy"
@@ -230,6 +259,7 @@ export default function SignUpCard(props: SignUpCardProps) {
         </Box>
         <div>
           <Button
+            className={classes.root}
             type="submit"
             color="primary"
             variant="contained"

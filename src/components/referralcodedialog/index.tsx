@@ -8,6 +8,21 @@ import Box from "@mui/material/Box";
 import { useForm, Controller } from "react-hook-form";
 import { AxiosResponse } from "axios";
 import { validateReferalToken } from "../../store/api";
+import { styled } from "@mui/material/styles";
+
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  root: {
+    background: "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 40,
+    padding: "0 30px",
+  },
+});
 
 export interface ReferralCodeDialogProps {
   open: boolean;
@@ -17,6 +32,8 @@ export interface ReferralCodeDialogProps {
 }
 
 export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
+  const classes = useStyles();
+
   const { handleSubmit, control, getValues, setValue } = useForm();
 
   React.useEffect(() => {
@@ -40,6 +57,20 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
 
   const btnstyle = { margin: "8px 0" };
 
+  const CustomizedTextField = styled(TextField)({
+    "& label.Mui-focused": {
+      color: "#ac42c2",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#ac42c2",
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#ac42c2",
+      },
+    },
+  });
+
   return (
     <div>
       <Dialog
@@ -62,7 +93,7 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
                   fieldState: { error },
                 }) => {
                   return (
-                    <TextField
+                    <CustomizedTextField
                       label="Referral code"
                       variant="outlined"
                       value={value}
@@ -95,6 +126,7 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
             </Box>
             <div>
               <Button
+                className={classes.root}
                 type="submit"
                 color="primary"
                 variant="contained"

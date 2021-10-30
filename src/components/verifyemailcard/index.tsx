@@ -22,8 +22,26 @@ import {
 import { useMemo } from "react";
 import { getItemFromLocalStorage } from "../../utils/storage";
 import { useHistory } from "react-router";
+import { styled } from "@mui/material/styles";
+import Link from "@mui/material/Link";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  root: {
+    background:
+      "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 40,
+    padding: "0 30px",
+  },
+});
 
 export default function VerifyEmailCard() {
+  const classes = useStyles();
+
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -170,19 +188,36 @@ export default function VerifyEmailCard() {
     }
   };
 
-  const btnstyle = { margin: "8px 0" };
+  const btnstyle = {
+    margin: "8px 0",
+    color: "#FFFFFF",
+  };
+
+  const CustomizedTextField = styled(TextField)({
+    "& label.Mui-focused": {
+      color: "#ac42c2",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#ac42c2",
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#ac42c2",
+      },
+    },
+  });
 
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box mt={2} mb={2}>
+        <Box mt={4} mb={2}>
           <Controller
             name="email"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
-                <TextField
+                <CustomizedTextField
                   label="Email"
                   variant="outlined"
                   value={value}
@@ -215,7 +250,7 @@ export default function VerifyEmailCard() {
                   fieldState: { error },
                 }) => {
                   return (
-                    <TextField
+                    <CustomizedTextField
                       label="Verification Code"
                       variant="outlined"
                       value={value}
@@ -237,22 +272,30 @@ export default function VerifyEmailCard() {
             </Box>
             {resendEmailTokenCount < 3 && (
               <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
-                <Typography
+                {/* <Typography
                   variant="subtitle2"
                   component="div"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", color: "#00c38c" }}
+                ></Typography> */}
+                <Link
+                  underline="always"
                   onClick={(e: any) => {
                     resendEmailCode();
                   }}
+                  style={{
+                    cursor: "pointer",
+                    color: "#37297e",
+                  }}
                 >
                   {"Resend code"}
-                </Typography>
+                </Link>
               </Box>
             )}
           </React.Fragment>
         )}
         <div>
           <Button
+            className={classes.root}
             type="submit"
             color="primary"
             variant="contained"
