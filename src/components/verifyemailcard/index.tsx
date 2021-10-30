@@ -90,7 +90,7 @@ export default function VerifyEmailCard() {
       (!verifyEmailLoading && verifyEmailSuccess && isLogin != null) ||
       (!verifyEmailLoading && verifyEmailFailure)
     ) {
-      // Email verfication api done 
+      // Email verfication api done
       dispatch(emailVerificationClear());
     }
   }, [verifyEmailLoading, verifyEmailSuccess, verifyEmailFailure, isLogin]);
@@ -106,7 +106,7 @@ export default function VerifyEmailCard() {
       // Email code verfication done success case
       // Route to dashboard page
       dispatch(emailVerificationCodeClear());
-      history.push('/dashboard')
+      history.push("/dashboard");
     } else if (!verifyEmailCodeLoading && verifyEmailCodeFailure) {
       // Email code verfication done failed case
       dispatch(emailVerificationCodeClear());

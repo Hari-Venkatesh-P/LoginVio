@@ -25,20 +25,35 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/reducer";
 import CustomAppBar from "../../components/appbar";
 import { APP_NAME } from "../../utils/constants";
+import { useLocation, useHistory } from "react-router-dom";
+
 const Login = () => {
+  const location = useLocation();
+  const history = useHistory();
+
   const paperStyle = {
     padding: 20,
     // height: "25rem",
     width: 280,
     margin: "20px auto",
   };
+
+  const [inviteReferralCode, seInviteReferralCode] = React.useState<
+    string | null
+  >(null);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    if (queryParams.has("invite")) {
+      seInviteReferralCode(queryParams.get("invite"));
+      queryParams.delete("invite");
+      history.replace({
+        search: queryParams.toString(),
+      });
+    }
+  }, []);
+
   const avatarStyle = { backgroundColor: "#1565c0" };
-
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   const useStyle = makeStyles({
     indicator: {
@@ -75,10 +90,7 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <CustomAppBar
-        title={APP_NAME}
-        showLogOut={showLogout}
-      />
+      <CustomAppBar title={APP_NAME} showLogOut={showLogout} />
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Box
@@ -94,7 +106,7 @@ const Login = () => {
             </Avatar>
             <h2>{APP_NAME}</h2>
           </Box>
-          {!showSignUpCard ? <VerifyEmailCard /> : <SignUpCard />}
+          {!showSignUpCard ? <VerifyEmailCard /> : <SignUpCard inviteReferralCode={inviteReferralCode}/>}
 
           {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs

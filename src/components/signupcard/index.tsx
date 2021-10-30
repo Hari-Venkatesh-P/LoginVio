@@ -12,9 +12,15 @@ import { useHistory } from "react-router";
 import { validateReferalToken } from "../../store/api";
 import { AxiosResponse } from "axios";
 import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import ReferralCodeDialog from "../referralcodedialog/index";
+
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
-export default function SignUpCard() {
+export interface SignUpCardProps {
+  inviteReferralCode: string | null;
+}
+export default function SignUpCard(props: SignUpCardProps) {
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -30,6 +36,11 @@ export default function SignUpCard() {
   const isLogin = useSelector((state: any) => state.isLogin);
 
   const [policyAgree, setPolicyAgree] = React.useState<boolean>(false);
+
+  const [referralCode, setReferralCode] = React.useState<string | null>(null);
+
+  const [isReferralCodeModalOpen, setReferralCodeModalOpen] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (email.length > 0) {
@@ -59,13 +70,8 @@ export default function SignUpCard() {
       token: getItemFromLocalStorage("token"),
       source: "WEB_APP",
     };
-    if (data.referredCodeKey.length > 0) {
-      let res: AxiosResponse = await validateReferalToken(data.referredCodeKey);
-      if (res.status == 200 && res.data && res.data.success) {
-        payload["referredCodeKey"] = data.referredCodeKey;
-      } else {
-        return;
-      }
+    if (referralCode && referralCode.length > 0) {
+      payload["referredCodeKey"] = referralCode;
     }
     signupUser(payload);
   };
@@ -143,40 +149,46 @@ export default function SignUpCard() {
             }}
           />
         </Box>
-        <Box mt={2} mb={1}>
-          <Controller
-            name="referredCodeKey"
-            control={control}
-            defaultValue=""
-            render={({ field: { onChange, value }, fieldState: { error } }) => {
-              return (
-                <TextField
-                  label="Referred code"
-                  variant="outlined"
-                  value={value}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                  size="small"
-                  fullWidth
-                />
-              );
-            }}
-            rules={{
-              pattern: {
-                value: /^[A-Z0-9]{6}$/i,
-                message: "Referred code invalid",
-              },
-              maxLength: {
-                value: "6",
-                message: "Referred code invalid",
-              },
-              minLength: {
-                value: "6",
-                message: "Referred code invalid",
-              },
-            }}
-          />
+        <Box
+          sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+        >
+          {referralCode && referralCode.length > 0 ? (
+            <React.Fragment>
+              <Typography variant="body1" component="div">
+                {"Your Referral Code - "}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                component="div"
+                style={{
+                  marginLeft: "1em",
+                  color: "#1565c0",
+                }}
+              >
+                {referralCode}
+              </Typography>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Typography variant="body1" component="div">
+                {"Having a Referral Code ?  "}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                component="div"
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "1em",
+                  color: "#1565c0",
+                }}
+                onClick={(e: any) => {
+                  setReferralCodeModalOpen(true);
+                }}
+              >
+                {"Enter"}
+              </Typography>
+            </React.Fragment>
+          )}
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <FormControlLabel
@@ -206,6 +218,19 @@ export default function SignUpCard() {
           </Button>
         </div>
       </form>
+      <ReferralCodeDialog
+        referralCode={referralCode}
+        setReferralCode={(value: string) => {
+          setReferralCode(value);
+        }}
+        open={isReferralCodeModalOpen}
+        closeModal={() => {
+          setReferralCodeModalOpen(false);
+        }}
+        inviteReferralCode={
+          props.inviteReferralCode ? props.inviteReferralCode : ""
+        }
+      />
     </Box>
   );
 }
