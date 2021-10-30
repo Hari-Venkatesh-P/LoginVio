@@ -6,11 +6,9 @@ import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { signupRequest, signupClear } from "../../store/actions/index";
 import { SignUpPayLoad } from "../../store/models";
-import { useMemo } from "react";
 import { getItemFromLocalStorage } from "../../utils/storage";
 import { useHistory } from "react-router";
-import { validateReferalToken } from "../../store/api";
-import { AxiosResponse } from "axios";
+import Link from "@mui/material/Link";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -149,47 +147,73 @@ export default function SignUpCard(props: SignUpCardProps) {
             }}
           />
         </Box>
-        <Box
-          sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-        >
-          {referralCode && referralCode.length > 0 ? (
-            <React.Fragment>
-              <Typography variant="body1" component="div">
-                {"Your Referral Code - "}
+        {referralCode && referralCode.length > 0 ? (
+          <React.Fragment>
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="subtitle1" component="div">
+                {"Referral Code -"}
               </Typography>
               <Typography
-                variant="subtitle2"
+                variant="subtitle1"
                 component="div"
                 style={{
-                  marginLeft: "1em",
+                  marginLeft: "0.5em",
+                  marginRight: "0.5em",
                   color: "#1565c0",
                 }}
               >
                 {referralCode}
               </Typography>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
+              <Link
+                underline="always"
+                onClick={() => {
+                  setReferralCodeModalOpen(true);
+                }}
+                style={{
+                  cursor: "pointer",
+                  color: "#1565c0",
+                  marginBottom : "0.25rem"
+                }}
+              >
+                {"Change ?"}
+              </Link>
+            </Box>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
               <Typography variant="body1" component="div">
                 {"Having a Referral Code ?  "}
               </Typography>
-              <Typography
-                variant="subtitle2"
-                component="div"
+              <Link
+                underline="always"
+                onClick={() => {
+                  setReferralCodeModalOpen(true);
+                }}
                 style={{
                   cursor: "pointer",
-                  marginLeft: "1em",
                   color: "#1565c0",
-                }}
-                onClick={(e: any) => {
-                  setReferralCodeModalOpen(true);
+                  marginLeft: "1em",
+                  marginBottom : "0.25rem"
                 }}
               >
                 {"Enter"}
-              </Typography>
-            </React.Fragment>
-          )}
-        </Box>
+              </Link>
+            </Box>
+          </React.Fragment>
+        )}
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <FormControlLabel
             control={
@@ -219,7 +243,6 @@ export default function SignUpCard(props: SignUpCardProps) {
         </div>
       </form>
       <ReferralCodeDialog
-        referralCode={referralCode}
         setReferralCode={(value: string) => {
           setReferralCode(value);
         }}
@@ -228,7 +251,11 @@ export default function SignUpCard(props: SignUpCardProps) {
           setReferralCodeModalOpen(false);
         }}
         inviteReferralCode={
-          props.inviteReferralCode ? props.inviteReferralCode : ""
+          props.inviteReferralCode
+            ? props.inviteReferralCode
+            : referralCode
+            ? referralCode
+            : ""
         }
       />
     </Box>

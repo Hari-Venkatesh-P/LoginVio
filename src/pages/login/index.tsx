@@ -1,31 +1,19 @@
 import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import LockClockIcon from "@mui/icons-material/LockClock";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import { makeStyles } from "@mui/styles";
 
 import VerifyEmailCard from "../../components/verifyemailcard/index";
 import SignUpCard from "../../components/signupcard/index";
-import { EMAIL_VERIFICATION_REQUEST } from "../../store/constants";
-import { VerifyEmailPayload } from "../../store/models";
-import {
-  emailVerificationClear,
-  emailVerificationRequest,
-} from "../../store/actions";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/reducer";
+
+import { useSelector } from "react-redux";
 import CustomAppBar from "../../components/appbar";
 import { APP_NAME } from "../../utils/constants";
 import { useLocation, useHistory } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const Login = () => {
   const location = useLocation();
@@ -53,6 +41,10 @@ const Login = () => {
     }
   }, []);
 
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
+
   const avatarStyle = { backgroundColor: "#1565c0" };
 
   const useStyle = makeStyles({
@@ -60,8 +52,6 @@ const Login = () => {
       top: "0px",
     },
   });
-
-  const classes = useStyle();
 
   const emailVerifiedStatus = useSelector(
     (state: any) => state.emailVerifiedStatus
@@ -91,37 +81,44 @@ const Login = () => {
   return (
     <React.Fragment>
       <CustomAppBar title={APP_NAME} showLogOut={showLogout} />
-      <Grid>
-        <Paper elevation={10} style={paperStyle}>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Avatar style={avatarStyle}>
-              <LockClockIcon />
-            </Avatar>
-            <h2>{APP_NAME}</h2>
-          </Box>
-          {!showSignUpCard ? <VerifyEmailCard /> : <SignUpCard inviteReferralCode={inviteReferralCode}/>}
-
-          {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            classes={{
-              indicator: classes.indicator,
-            }}
-            value={value}
-            onChange={handleChange}
-            variant="fullWidth"
-          >
-            <Tab label="VERIFY" value={0} />
-            <Tab label="SIGN UP" value={1} />
-          </Tabs>
-        </Box> */}
-        </Paper>
+      <Grid
+        container
+        style={{
+          backgroundImage: `url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1")`,
+        }}
+      >
+        {isDesktopOrLaptop && <Grid item xs={4}></Grid>}
+        <Grid
+          item
+          xs={isDesktopOrLaptop ? 8 : 12}
+          style={{
+            height: "91vh",
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Paper elevation={10} style={paperStyle}>
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Avatar style={avatarStyle}>
+                <LockClockIcon />
+              </Avatar>
+              <h2>{APP_NAME}</h2>
+            </Box>
+            {!showSignUpCard ? (
+              <VerifyEmailCard />
+            ) : (
+              <SignUpCard inviteReferralCode={inviteReferralCode} />
+            )}
+          </Paper>
+        </Grid>
       </Grid>
     </React.Fragment>
   );

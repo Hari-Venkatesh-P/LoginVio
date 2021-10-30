@@ -1,28 +1,6 @@
-import React, { useEffect, useMemo } from "react";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import LockClockIcon from "@mui/icons-material/LockClock";
-import Avatar from "@mui/material/Avatar";
-import Paper from "@mui/material/Paper";
+import React, {  useMemo } from "react";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import { makeStyles } from "@mui/styles";
-
-import VerifyEmailCard from "../../components/verifyemailcard/index";
-import SignUpCard from "../../components/signupcard/index";
-import { EMAIL_VERIFICATION_REQUEST } from "../../store/constants";
-import { VerifyEmailPayload } from "../../store/models";
-import {
-  emailVerificationClear,
-  emailVerificationRequest,
-} from "../../store/actions";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/reducer";
+import { useSelector } from "react-redux";
 import CustomAppBar from "../../components/appbar";
 import { APP_NAME } from "../../utils/constants";
 const Dashboard = () => {

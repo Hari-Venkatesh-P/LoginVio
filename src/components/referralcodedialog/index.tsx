@@ -11,7 +11,6 @@ import { validateReferalToken } from "../../store/api";
 
 export interface ReferralCodeDialogProps {
   open: boolean;
-  referralCode: string | null;
   inviteReferralCode: string;
   setReferralCode: any;
   closeModal: any;
@@ -47,6 +46,7 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
         open={props.open}
         onClose={() => {
           props.closeModal();
+          setValue("referredCodeKey", "");
         }}
       >
         <DialogContent>
@@ -63,14 +63,14 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
                 }) => {
                   return (
                     <TextField
-                      label="Referred code"
+                      label="Referral code"
                       variant="outlined"
                       value={value}
                       onChange={onChange}
                       error={!!error || invalidReferralCode}
                       helperText={
                         error || invalidReferralCode
-                          ? "Referred code invalid"
+                          ? "Referral code invalid"
                           : null
                       }
                       size="small"
@@ -80,15 +80,15 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
                 rules={{
                   pattern: {
                     value: /^[A-Z0-9]{6}$/i,
-                    message: "Referred code invalid",
+                    message: "Referral code invalid",
                   },
                   maxLength: {
                     value: "6",
-                    message: "Referred code invalid",
+                    message: "Referral code invalid",
                   },
                   minLength: {
                     value: "6",
-                    message: "Referred code invalid",
+                    message: "Referral code invalid",
                   },
                 }}
               />
