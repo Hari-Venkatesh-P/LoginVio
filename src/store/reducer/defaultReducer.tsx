@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { initialReducerState, VerifyEmailPayload } from "../models";
+import { initialReducerState, SignupSuccessResponse, VerifyEmailPayload } from "../models";
 import { StoreActions } from "../actions/index";
 import {
   EMAIL_VERIFICATION_REQUEST,
@@ -46,6 +46,7 @@ const initialCheckInState: initialReducerState = {
   resendEmailTokenCount: 0,
   emailVerifiedStatus: false,
   emailTokenVerifiedStatus: false,
+  userDetails : null
 };
 
 export default function defaultReducer(
@@ -81,7 +82,9 @@ export default function defaultReducer(
         current.verifyEmailCodeSuccess = true;
         current.verifyEmailCodeLoading = false;
         current.emailTokenVerifiedStatus = true;
-        current.isLogin = action.payload as boolean;
+        const emailVerificationSucessResponse = action.payload as SignupSuccessResponse;
+        current.isLogin = emailVerificationSucessResponse.isLogin;
+        current.userDetails = emailVerificationSucessResponse.userDetails;
         break;
       case EMAIL_VERIFICATION_CODE_FAILURE:
         current.verifyEmailCodeFailure = true;
@@ -114,6 +117,9 @@ export default function defaultReducer(
       case SIGN_UP_SUCCESS:
         current.signupSuccess = true;
         current.signupLoading = false;
+        const signupSuccessResponse = action.payload as SignupSuccessResponse;
+        current.isLogin = signupSuccessResponse.isLogin;
+        current.userDetails = signupSuccessResponse.userDetails;
         break;
       case SIGN_UP_FAILURE:
         current.signupFailure = true;

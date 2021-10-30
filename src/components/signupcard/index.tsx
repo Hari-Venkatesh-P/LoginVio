@@ -8,8 +8,13 @@ import { signupRequest, signupClear } from "../../store/actions/index";
 import { SignUpPayLoad } from "../../store/models";
 import { useMemo } from "react";
 import { getItemFromLocalStorage } from "../../utils/storage";
+import { useHistory } from "react-router";
+import { validateReferalToken } from "../../store/api";
+import { AxiosResponse } from "axios";
 
 export default function SignUpCard() {
+  const history = useHistory();
+
   const dispatch = useDispatch();
 
   const signupFailure = useSelector((state: any) => state.signupFailure);
@@ -31,9 +36,9 @@ export default function SignUpCard() {
   // Callbacks for Signup User.
   React.useEffect(() => {
     if (!signupLoading && signupSuccess && isLogin != null && isLogin == true) {
-      // Route to dashboard
       console.log("success");
       dispatch(signupClear());
+      history.push("/dashboard");
     } else if (!signupLoading && signupFailure) {
       console.log("failed");
       dispatch(signupClear());
@@ -42,18 +47,22 @@ export default function SignUpCard() {
 
   const { handleSubmit, control, getValues, setValue } = useForm();
 
-  const onSubmit = (data: any) => {
-    const payload: SignUpPayLoad = {
+  const onSubmit = async (data: any) => {
+    let payload: SignUpPayLoad = {
       firstName: data.firstName,
       email: data.email,
-      referredCodeKey:
-        data.referredCodeKey && data.referredCodeKey.length > 0
-          ? data.referredCodeKey
-          : "MAYANK",
       agreeToPrivacyPolicy: true,
       token: getItemFromLocalStorage("token"),
       source: "WEB_APP",
     };
+    if (data.referredCodeKey.length > 0) {
+      let res: AxiosResponse = await validateReferalToken(data.referredCodeKey);
+      if (res.status == 200 && res.data && res.data.success) {
+        payload["referredCodeKey"] = data.referredCodeKey;
+      } else {
+        return;
+      }
+    }
     signupUser(payload);
   };
 
@@ -122,6 +131,7 @@ export default function SignUpCard() {
                 value: true,
                 message: "Email required",
               },
+
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                 message: "Email invalid",
@@ -151,6 +161,14 @@ export default function SignUpCard() {
             rules={{
               pattern: {
                 value: /^[A-Z0-9]{6}$/i,
+                message: "Referred code invalid",
+              },
+              maxLength: {
+                value: "6",
+                message: "Referred code invalid",
+              },
+              minLength: {
+                value: "6",
                 message: "Referred code invalid",
               },
             }}

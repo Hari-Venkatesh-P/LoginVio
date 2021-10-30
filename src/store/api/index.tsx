@@ -1,4 +1,5 @@
 import apiCall from "../../utils/api";
+import { API_END_POINTS } from "../../utils/constants";
 import {
   ResendEmailCodePayload,
   SignUpPayLoad,
@@ -7,17 +8,27 @@ import {
 } from "../models";
 
 export function verifyEmailAPI(data: VerifyEmailPayload) {
-  return apiCall("/users/email", "POST", null, data, null);
+  return apiCall(API_END_POINTS.VERIFY_EMAIL, "POST", null, data, null);
 }
 
 export function verifyEmailCode(data: VerifyEmailCodePayload) {
-  return apiCall("/users/email/verify", "PUT", null, data, null);
+  return apiCall(API_END_POINTS.VERIFY_EMAIL_CODE, "PUT", null, data, null);
 }
 
 export function resendEmailCode(data: ResendEmailCodePayload) {
-  return apiCall("/users/token/resendtoken", "PUT", null, data, null);
+  return apiCall(API_END_POINTS.RESEND_EMAIL_CODE, "PUT", null, data, null);
 }
 
 export function signUp(data: SignUpPayLoad) {
-  return apiCall("/users", "POST", null, data, null);
+  return apiCall(API_END_POINTS.SIGN_UP_USER, "POST", null, data, null);
+}
+
+export function validateReferalToken(token: string) {
+  return apiCall(
+    `${API_END_POINTS.VERIFY_REFERRAL_CODE}${token}`,
+    "GET",
+    null,
+    null,
+    null
+  );
 }

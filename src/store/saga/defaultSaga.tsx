@@ -69,7 +69,11 @@ function* verifyEmailCodeSaga(action: StoreActions) {
       let data = response.data as ApiResponse;
       let responseData: Results = data.results ? data.results : data.messageObj;
       if (data.success) {
-        yield put(emailVerificationCodeSuccess(responseData.isLogin));
+        const data: SignupSuccessResponse = {
+          isLogin: responseData.isLogin,
+          userDetails: responseData.user ? responseData.user : null,
+        };
+        yield put(emailVerificationCodeSuccess(data));
       } else {
         yield put(
           emailVerificationCodeFailure(responseData.wrongEmailTokenCount)
@@ -120,7 +124,7 @@ function* signupSaga(action: StoreActions) {
       let responseData: Results = data.results ? data.results : data.messageObj;
       if (data.success) {
         const data: SignupSuccessResponse = {
-          isLogin: responseData.isLogin,
+          isLogin: responseData.user ? true : false,
           userDetails: responseData.user ? responseData.user : null,
         };
         yield put(signupSuccess(data));

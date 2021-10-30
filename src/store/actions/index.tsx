@@ -46,8 +46,8 @@ export function emailVerificationCodeRequest(details: VerifyEmailCodePayload) {
   return typedAction(EMAIL_VERIFICATION_CODE_REQUEST, details);
 }
 
-export function emailVerificationCodeSuccess(isLogin: boolean) {
-  return typedAction(EMAIL_VERIFICATION_CODE_SUCCESS, isLogin);
+export function emailVerificationCodeSuccess(details: SignupSuccessResponse) {
+  return typedAction(EMAIL_VERIFICATION_CODE_SUCCESS, details);
 }
 
 export function emailVerificationCodeFailure(wrongEmailTokenCount: number) {

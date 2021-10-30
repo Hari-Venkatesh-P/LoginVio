@@ -14,7 +14,7 @@ import Tab from "@mui/material/Tab";
 import { makeStyles } from "@mui/styles";
 
 import VerifyEmailCard from "../../components/verifyemailcard/index";
-import SignUpCard from "../../components/signup/index";
+import SignUpCard from "../../components/signupcard/index";
 import { EMAIL_VERIFICATION_REQUEST } from "../../store/constants";
 import { VerifyEmailPayload } from "../../store/models";
 import {
@@ -23,6 +23,8 @@ import {
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/reducer";
+import CustomAppBar from "../../components/appbar";
+import { APP_NAME } from "../../utils/constants";
 const Login = () => {
   const paperStyle = {
     padding: 20,
@@ -56,6 +58,8 @@ const Login = () => {
 
   const isLogin = useSelector((state: any) => state.isLogin);
 
+  const userDetails = useSelector((state: any) => state.userDetails);
+
   const showSignUpCard = useMemo(() => {
     return (
       isLogin != null &&
@@ -65,25 +69,34 @@ const Login = () => {
     );
   }, [isLogin, emailVerifiedStatus, emailTokenVerifiedStatus]);
 
-  return (
-    <Grid>
-      <Paper elevation={10} style={paperStyle}>
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Avatar style={avatarStyle}>
-            <LockClockIcon />
-          </Avatar>
-          <h2>Basis</h2>
-        </Box>
-        {!showSignUpCard ? <VerifyEmailCard /> : <SignUpCard />}
+  const showLogout = useMemo(() => {
+    return isLogin != null && isLogin == true && userDetails != null;
+  }, [userDetails, isLogin]);
 
-        {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+  return (
+    <React.Fragment>
+      <CustomAppBar
+        title={APP_NAME}
+        showLogOut={showLogout}
+      />
+      <Grid>
+        <Paper elevation={10} style={paperStyle}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Avatar style={avatarStyle}>
+              <LockClockIcon />
+            </Avatar>
+            <h2>{APP_NAME}</h2>
+          </Box>
+          {!showSignUpCard ? <VerifyEmailCard /> : <SignUpCard />}
+
+          {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             classes={{
               indicator: classes.indicator,
@@ -96,8 +109,9 @@ const Login = () => {
             <Tab label="SIGN UP" value={1} />
           </Tabs>
         </Box> */}
-      </Paper>
-    </Grid>
+        </Paper>
+      </Grid>
+    </React.Fragment>
   );
 };
 

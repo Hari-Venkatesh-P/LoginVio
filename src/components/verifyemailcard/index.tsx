@@ -21,8 +21,11 @@ import {
 } from "../../store/models";
 import { useMemo } from "react";
 import { getItemFromLocalStorage } from "../../utils/storage";
+import { useHistory } from "react-router";
 
 export default function VerifyEmailCard() {
+  const history = useHistory();
+
   const dispatch = useDispatch();
 
   const verifyEmailFailure = useSelector(
@@ -87,7 +90,7 @@ export default function VerifyEmailCard() {
       (!verifyEmailLoading && verifyEmailSuccess && isLogin != null) ||
       (!verifyEmailLoading && verifyEmailFailure)
     ) {
-      // Email verfication done success case
+      // Email verfication api done 
       dispatch(emailVerificationClear());
     }
   }, [verifyEmailLoading, verifyEmailSuccess, verifyEmailFailure, isLogin]);
@@ -102,11 +105,10 @@ export default function VerifyEmailCard() {
     ) {
       // Email code verfication done success case
       // Route to dashboard page
-      console.log("success");
       dispatch(emailVerificationCodeClear());
+      history.push('/dashboard')
     } else if (!verifyEmailCodeLoading && verifyEmailCodeFailure) {
       // Email code verfication done failed case
-      console.log("failed");
       dispatch(emailVerificationCodeClear());
     }
   }, [
@@ -122,7 +124,6 @@ export default function VerifyEmailCard() {
       (!resendEmailCodeLoading && resendEmailCodeSuccess) ||
       (!resendEmailCodeLoading && resendEmailCodeFailure)
     ) {
-      // Route to login page
       dispatch(resendEmailVerificationCodeClear());
     }
   }, [resendEmailCodeLoading, resendEmailCodeSuccess, resendEmailCodeFailure]);
@@ -130,6 +131,7 @@ export default function VerifyEmailCard() {
   // Watcher for wrong email token count
   React.useEffect(() => {
     if (emailVerifiedStatus && wrongEmailTokenCount > 2) {
+      // Resetting the verification status , since user has expired the max count
       setValue("email", "");
       dispatch(revertEmailVerifications());
     }

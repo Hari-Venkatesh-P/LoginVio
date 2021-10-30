@@ -16,7 +16,7 @@ export interface ResendEmailCodePayload {
 export interface SignUpPayLoad {
   firstName: string;
   email: string;
-  referredCodeKey: string | null;
+  referredCodeKey?: string | null;
   agreeToPrivacyPolicy: boolean;
   token: string | null;
   source: string;
@@ -47,6 +47,7 @@ export interface initialReducerState {
   resendEmailTokenCount: number;
   emailVerifiedStatus: boolean;
   emailTokenVerifiedStatus: boolean;
+  userDetails : User | null;
 }
 
 export interface ApiResponse {
