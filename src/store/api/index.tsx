@@ -32,3 +32,13 @@ export function validateReferalToken(token: string) {
     null
   );
 }
+
+export function logoutUserAPI(authCode: string | null, headersMap: any) {
+  return apiCall(
+    `${API_END_POINTS.LOGOUT_USER}${authCode}`,
+    "DELETE",
+    null,
+    null,
+    headersMap
+  );
+}

@@ -16,6 +16,7 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
   SIGN_UP_CLEAR,
+  LOG_OUT_USER,
 } from "../constants";
 import {
   ResendEmailCodePayload,
@@ -85,7 +86,7 @@ export function signupRequest(details: SignUpPayLoad) {
   return typedAction(SIGN_UP_REQUEST, details);
 }
 
-export function signupSuccess(details : SignupSuccessResponse) {
+export function signupSuccess(details: SignupSuccessResponse) {
   return typedAction(SIGN_UP_SUCCESS, details);
 }
 
@@ -99,6 +100,10 @@ export function signupClear() {
 
 export function revertEmailVerifications() {
   return typedAction(REVERT_EMAIL_VERIFICATION, "");
+}
+
+export function logOutUser() {
+  return typedAction(LOG_OUT_USER, "");
 }
 
 export type StoreActions = ReturnType<
@@ -119,4 +124,5 @@ export type StoreActions = ReturnType<
   | typeof signupFailure
   | typeof signupClear
   | typeof revertEmailVerifications
+  | typeof logOutUser
 >;

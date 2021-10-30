@@ -1,5 +1,9 @@
 import { produce } from "immer";
-import { initialReducerState, SignupSuccessResponse, VerifyEmailPayload } from "../models";
+import {
+  initialReducerState,
+  SignupSuccessResponse,
+  VerifyEmailPayload,
+} from "../models";
 import { StoreActions } from "../actions/index";
 import {
   EMAIL_VERIFICATION_REQUEST,
@@ -18,6 +22,7 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
   SIGN_UP_CLEAR,
+  LOG_OUT_USER,
   REVERT_EMAIL_VERIFICATION,
 } from "../constants";
 
@@ -46,7 +51,7 @@ const initialCheckInState: initialReducerState = {
   resendEmailTokenCount: 0,
   emailVerifiedStatus: false,
   emailTokenVerifiedStatus: false,
-  userDetails : null
+  userDetails: null,
 };
 
 export default function defaultReducer(
@@ -82,7 +87,8 @@ export default function defaultReducer(
         current.verifyEmailCodeSuccess = true;
         current.verifyEmailCodeLoading = false;
         current.emailTokenVerifiedStatus = true;
-        const emailVerificationSucessResponse = action.payload as SignupSuccessResponse;
+        const emailVerificationSucessResponse =
+          action.payload as SignupSuccessResponse;
         current.isLogin = emailVerificationSucessResponse.isLogin;
         current.userDetails = emailVerificationSucessResponse.userDetails;
         break;
@@ -125,7 +131,7 @@ export default function defaultReducer(
         current.signupFailure = true;
         current.signupLoading = false;
         break;
-      case SIGN_UP_FAILURE:
+      case SIGN_UP_CLEAR:
         current.signupSuccess = false;
         current.signupFailure = false;
         break;
@@ -136,6 +142,15 @@ export default function defaultReducer(
         current.resendEmailTokenCount = 0;
         current.emailVerifiedStatus = false;
         current.emailTokenVerifiedStatus = false;
+        break;
+      case LOG_OUT_USER:
+        current.isLogin = null;
+        current.email = null;
+        current.wrongEmailTokenCount = 0;
+        current.resendEmailTokenCount = 0;
+        current.emailVerifiedStatus = false;
+        current.emailTokenVerifiedStatus = false;
+        current.userDetails = null;
         break;
     }
   });

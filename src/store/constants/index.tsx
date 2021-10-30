@@ -43,4 +43,7 @@ export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
 
 export const SIGN_UP_CLEAR = "SIGN_UP_CLEAR";
 
+// Logout user
+export const LOG_OUT_USER = "LOG_OUT_USER";
+
 export const REVERT_EMAIL_VERIFICATION = "REVERT_EMAIL_VERIFICATION";

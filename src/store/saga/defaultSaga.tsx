@@ -73,6 +73,10 @@ function* verifyEmailCodeSaga(action: StoreActions) {
           isLogin: responseData.isLogin,
           userDetails: responseData.user ? responseData.user : null,
         };
+        if (responseData.user) {
+          setItemToLocalStorage("authToken", responseData.user.token);
+          setItemToLocalStorage("userId", responseData.user._id);
+        }
         yield put(emailVerificationCodeSuccess(data));
       } else {
         yield put(
@@ -127,6 +131,10 @@ function* signupSaga(action: StoreActions) {
           isLogin: responseData.user ? true : false,
           userDetails: responseData.user ? responseData.user : null,
         };
+        if (responseData.user) {
+          setItemToLocalStorage("authToken", responseData.user.token);
+          setItemToLocalStorage("userId", responseData.user._id);
+        }
         yield put(signupSuccess(data));
       } else {
         yield put(signupFailure());
