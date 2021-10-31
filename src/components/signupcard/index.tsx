@@ -144,6 +144,10 @@ export default function SignUpCard(props: SignUpCardProps) {
                 value: "3",
                 message: "First name invalid",
               },
+              pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: "First name invalid",
+              },
             }}
           />
         </Box>
