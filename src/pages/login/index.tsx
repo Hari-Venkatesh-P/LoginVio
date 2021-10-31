@@ -1,19 +1,16 @@
 import React, { useEffect, useMemo } from "react";
+import { useLocation, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 import Box from "@mui/material/Box";
 import LockClockIcon from "@mui/icons-material/LockClock";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { makeStyles } from "@mui/styles";
 
 import VerifyEmailCard from "../../components/verifyemailcard/index";
 import SignUpCard from "../../components/signupcard/index";
-
-import { useSelector } from "react-redux";
-import CustomAppBar from "../../components/appbar";
 import { APP_NAME } from "../../utils/constants";
-import { useLocation, useHistory } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
 
 import 'react-notifications-component/dist/theme.css';
 import 'animate.css';
@@ -25,9 +22,7 @@ const Login = () => {
     query: "(min-width: 1224px)",
   });
   const paperStyle = {
-    // backgroundColor: "transparent",
     padding: 20,
-    // height: "25rem",
     width: isDesktopOrLaptop ? 370 : 280,
     margin: "20px auto",
   };
@@ -48,13 +43,6 @@ const Login = () => {
   }, []);
 
   const avatarStyle = { backgroundColor: "#ac42c2" };
-   //"linear-gradient(90deg, #37297e 10%, #ac42c2 50%)" };
-
-  const useStyle = makeStyles({
-    indicator: {
-      top: "0px",
-    },
-  });
 
   const emailVerifiedStatus = useSelector(
     (state: any) => state.emailVerifiedStatus
@@ -66,8 +54,6 @@ const Login = () => {
 
   const isLogin = useSelector((state: any) => state.isLogin);
 
-  const userDetails = useSelector((state: any) => state.userDetails);
-
   const showSignUpCard = useMemo(() => {
     return (
       isLogin != null &&
@@ -76,10 +62,6 @@ const Login = () => {
       emailTokenVerifiedStatus
     );
   }, [isLogin, emailVerifiedStatus, emailTokenVerifiedStatus]);
-
-  const showLogout = useMemo(() => {
-    return isLogin != null && isLogin == true && userDetails != null;
-  }, [userDetails, isLogin]);
 
   return (
     <React.Fragment>

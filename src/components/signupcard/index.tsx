@@ -1,20 +1,21 @@
 import * as React from "react";
+import { useHistory } from "react-router";
+import { styled } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
+import Link from "@mui/material/Link";
+import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+
 import { signupRequest, signupClear } from "../../store/actions/index";
 import { SignUpPayLoad } from "../../store/models";
-import { getItemFromLocalStorage } from "../../utils/storage";
-import { useHistory } from "react-router";
-import Link from "@mui/material/Link";
-import Checkbox from "@mui/material/Checkbox";
-import Typography from "@mui/material/Typography";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import ReferralCodeDialog from "../referralcodedialog/index";
-import { styled } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
+import { getItemFromLocalStorage } from "../../utils/storage";
 import { createNotification } from "../../utils/notification";
 
 const useStyles = makeStyles({
@@ -74,7 +75,7 @@ export default function SignUpCard(props: SignUpCardProps) {
     }
   }, [signupLoading, signupSuccess, signupFailure, isLogin]);
 
-  const { handleSubmit, control, getValues, setValue } = useForm();
+  const { handleSubmit, control,  setValue } = useForm();
 
   const onSubmit = async (data: any) => {
     let payload: SignUpPayLoad = {

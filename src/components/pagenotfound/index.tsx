@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import CustomAppBar from "../appbar";
+
 import { APP_NAME } from "../../utils/constants";
 
 export default function PageNotFound() {

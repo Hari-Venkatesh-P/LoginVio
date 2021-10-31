@@ -1,8 +1,12 @@
 import * as React from "react";
+import { useMemo } from "react";
+import { useHistory } from "react-router";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
+import Link from "@mui/material/Link";
+import { makeStyles } from "@mui/styles";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,13 +23,9 @@ import {
   VerifyEmailCodePayload,
   ResendEmailCodePayload,
 } from "../../store/models";
-import { useMemo } from "react";
 import { getItemFromLocalStorage } from "../../utils/storage";
-import { useHistory } from "react-router";
-import { styled } from "@mui/material/styles";
-import Link from "@mui/material/Link";
-import { makeStyles } from "@mui/styles";
 import { createNotification } from "../../utils/notification";
+
 const useStyles = makeStyles({
   root: {
     background: "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
@@ -39,6 +39,7 @@ const useStyles = makeStyles({
 });
 
 export default function VerifyEmailCard() {
+
   const classes = useStyles();
 
   const history = useHistory();
@@ -292,11 +293,6 @@ export default function VerifyEmailCard() {
             </Box>
             {resendEmailTokenCount < 3 && (
               <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
-                {/* <Typography
-                  variant="subtitle2"
-                  component="div"
-                  style={{ cursor: "pointer", color: "#00c38c" }}
-                ></Typography> */}
                 <Link
                   underline="always"
                   onClick={(e: any) => {

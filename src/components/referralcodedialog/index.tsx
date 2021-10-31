@@ -1,16 +1,15 @@
 import * as React from "react";
+import { AxiosResponse } from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Box from "@mui/material/Box";
-import { useForm, Controller } from "react-hook-form";
-import { AxiosResponse } from "axios";
-import { validateReferalToken } from "../../store/api";
-import { styled } from "@mui/material/styles";
-
 import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
+import { useForm, Controller } from "react-hook-form";
+import { validateReferalToken } from "../../store/api";
 import { createNotification } from "../../utils/notification";
 
 const useStyles = makeStyles({

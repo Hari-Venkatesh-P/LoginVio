@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { APP_NAME } from "../../utils/constants";
-
+import { useMediaQuery } from "react-responsive";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { AxiosRequestHeaders } from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { User } from "../../store/models";
 import Typography from "@mui/material/Typography";
-
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -16,17 +16,14 @@ import Divider from "@mui/material/Divider";
 
 import Dashboardcard from "../../components/dashboardcard";
 import Userlabel from "../../components/labelcomponent";
-import { useMediaQuery } from "react-responsive";
-
+import { User } from "../../store/models";
 import { logoutUserAPI } from "../../store/api";
-import { AxiosRequestHeaders } from "axios";
+import { logOutUser } from "../../store/actions";
+import { APP_NAME } from "../../utils/constants";
 import {
   clearLocalStorage,
   getItemFromLocalStorage,
 } from "../../utils/storage";
-import { useSelector, useDispatch } from "react-redux";
-import { logOutUser } from "../../store/actions";
-import { useHistory } from "react-router";
 
 const Dashboard = () => {
   const userDetails = useSelector((state: any) => state.userDetails) as User;
@@ -83,7 +80,7 @@ const Dashboard = () => {
       clearLocalStorage();
       dispatch(logOutUser());
       history.push("/");
-    } 
+    }
   };
 
   return (
@@ -243,24 +240,14 @@ const Dashboard = () => {
                       : "center",
                   }}
                 >
-                  {/* <Box > */}
                   <img
                     src={userDetails.avatar}
                     width={"250rem"}
                     height={"250rem"}
                   ></img>
                   {isDesktopOrLaptop && <Divider orientation={"vertical"} />}
-                  {/* </Box> */}
                 </Grid>
                 <Grid item xs={12} md={8}>
-                  {/* <Paper
-                    sx={{
-                      p: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                      height: 295,
-                    }}
-                  > */}
                   <Grid
                     container
                     spacing={2}
@@ -275,7 +262,6 @@ const Dashboard = () => {
                     />
                     <Userlabel label={"Email"} value={userDetails.email} />
                   </Grid>
-                  {/* </Paper> */}
                 </Grid>
               </Grid>
             </Paper>
