@@ -67,7 +67,6 @@ export default function SignUpCard(props: SignUpCardProps) {
   // Callbacks for Signup User.
   React.useEffect(() => {
     if (!signupLoading && signupSuccess && isLogin != null && isLogin == true) {
-      console.log("success");
       dispatch(signupClear());
       history.push("/dashboard");
       createNotification("Signup sucess", " ", "success");

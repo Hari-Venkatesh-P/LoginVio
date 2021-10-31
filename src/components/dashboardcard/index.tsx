@@ -9,6 +9,8 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 import OfflineBoltSharpIcon from "@mui/icons-material/OfflineBoltSharp";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 const avatarStyle = { backgroundColor: "#ac42c2" };
 
@@ -19,6 +21,7 @@ export interface DashbaordCardProps {
 }
 
 export default function DashboardCard(props: DashbaordCardProps) {
+  const [textCopied, setTextCopied] = React.useState<boolean>(false);
   const renderIcon = React.useCallback(() => {
     return (
       <React.Fragment>
@@ -36,6 +39,7 @@ export default function DashboardCard(props: DashbaordCardProps) {
         display: "flex",
         flexDirection: "column",
         width: "auto",
+        height : 60,
       }}
     >
       <Box
@@ -78,11 +82,18 @@ export default function DashboardCard(props: DashbaordCardProps) {
                 >
                   {props.value}
                 </Typography>
-                <ContentCopyIcon />
+                <Tooltip title={textCopied ? "Copied" : "Copy code"}>
+                    <IconButton
+                      onClick={() => {
+                        setTextCopied(true);
+                      }}
+                    >
+                      <ContentCopyIcon />
+                    </IconButton>
+                </Tooltip>
                 <Link
                   underline="always"
                   onClick={() => {
-                    console.log(props.referralLink)
                     props.referralLink && window.open(props.referralLink);
                   }}
                   ml={1}
@@ -93,7 +104,7 @@ export default function DashboardCard(props: DashbaordCardProps) {
                     marginBottom: "0.25rem",
                   }}
                 >
-                  {"Share Link"}
+                  {"Open Link"}
                 </Link>
               </Box>
             </React.Fragment>
