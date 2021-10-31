@@ -15,6 +15,9 @@ import { APP_NAME } from "../../utils/constants";
 import { useLocation, useHistory } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css';
+
 const Login = () => {
   const location = useLocation();
   const history = useHistory();
@@ -44,7 +47,8 @@ const Login = () => {
     }
   }, []);
 
-  const avatarStyle = { backgroundColor: "#ac42c2" }; //"linear-gradient(90deg, #37297e 10%, #ac42c2 50%)" };
+  const avatarStyle = { backgroundColor: "#ac42c2" };
+   //"linear-gradient(90deg, #37297e 10%, #ac42c2 50%)" };
 
   const useStyle = makeStyles({
     indicator: {
@@ -79,7 +83,6 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      {/* <CustomAppBar title={APP_NAME} showLogOut={showLogout} /> */}
       <Grid
         container
         style={{

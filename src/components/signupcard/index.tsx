@@ -15,6 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import ReferralCodeDialog from "../referralcodedialog/index";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
+import { createNotification } from "../../utils/notification";
 
 const useStyles = makeStyles({
   root: {
@@ -66,8 +67,9 @@ export default function SignUpCard(props: SignUpCardProps) {
       console.log("success");
       dispatch(signupClear());
       history.push("/dashboard");
+      createNotification("Signup sucess", " ", "success");
     } else if (!signupLoading && signupFailure) {
-      console.log("failed");
+      createNotification("Signup failed.", " ", "danger");
       dispatch(signupClear());
     }
   }, [signupLoading, signupSuccess, signupFailure, isLogin]);

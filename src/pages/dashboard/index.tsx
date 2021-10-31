@@ -1,122 +1,287 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import CustomAppBar from "../../components/appbar";
+import React, { useEffect, useState } from "react";
 import { APP_NAME } from "../../utils/constants";
 
-import {  createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { User } from "../../store/models";
-import CustomCard from "../../components/customcard";
+import Typography from "@mui/material/Typography";
+
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import Divider from "@mui/material/Divider";
+
+import Dashboardcard from "../../components/dashboardcard";
+import Userlabel from "../../components/labelcomponent";
+import { useMediaQuery } from "react-responsive";
+
+import { logoutUserAPI } from "../../store/api";
+import { AxiosRequestHeaders } from "axios";
+import {
+  clearLocalStorage,
+  getItemFromLocalStorage,
+} from "../../utils/storage";
+import { useSelector, useDispatch } from "react-redux";
+import { logOutUser } from "../../store/actions";
+import { useHistory } from "react-router";
 
 const Dashboard = () => {
-  const isLogin = useSelector((state: any) => state.isLogin);
-
   const userDetails = useSelector((state: any) => state.userDetails) as User;
 
-  const showLogout = useMemo(() => {
-    return isLogin != null && isLogin == true && userDetails != null;
-  }, [userDetails, isLogin]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const mdTheme = createTheme();
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const handleBeforeUnload = (e: any) => {
+    e.preventDefault();
+    const message =
+      "On Refresh , you will be logged out. Are you sure you want to reload ?";
+    e.returnValue = message;
+    return message;
+  };
+
+  const getUrl = (referralMessage: string) => {
+    const len = referralMessage.split(" ").length;
+    return referralMessage.split(" ")[len - 1];
+  };
+
+  const dispatch = useDispatch();
+
+  const history = useHistory();
+
+  const handleLogout = async () => {
+    const headersMap: AxiosRequestHeaders = {
+      Authorization: `Bearer ${getItemFromLocalStorage(
+        "userId"
+      )},${getItemFromLocalStorage("authToken")}`,
+    };
+    const res = await logoutUserAPI(
+      getItemFromLocalStorage("userId"),
+      headersMap
+    );
+    if (res.status == 200 && res.data && res.data.success) {
+      clearLocalStorage();
+      dispatch(logOutUser());
+      history.push("/");
+    } 
+  };
 
   return (
     <Grid>
-      <CustomAppBar title={APP_NAME} showLogOut={showLogout} />
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
+      <Grid item xs={12} md={12} lg={12}>
+        <Paper
+          elevation={30}
+          sx={{
+            background: "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
+            display: "flex",
+            flexDirection: "column",
+            height: isDesktopOrLaptop ? "67vh" : "90vh",
+          }}
+        >
           <Box
-            component="main"
             sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: "90vh",
-              overflow: "auto",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <Toolbar />
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4} lg={3}>
-                  <Paper
+            <Box m={2}>
+              <Typography
+                variant="h6"
+                component="div"
+                style={{ color: "#FFFFFF" }}
+              >
+                {APP_NAME.toString().toUpperCase()}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Box
+                m={2}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Toolbar sx={{ padding: "unset !important" }}>
+                  <div>
+                    <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle style={{ color: "#FFFFFF" }} />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem>My account</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleLogout();
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                </Toolbar>
+                <Typography
+                  variant="body1"
+                  component="div"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  {userDetails.firstName}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              p: 2,
+              width: isDesktopOrLaptop ? "90vw" : "100vw",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              marginLeft: isDesktopOrLaptop ? "4vh" : "",
+            }}
+          >
+            <Grid item xs={12} md={4}>
+              <Dashboardcard
+                label={"Rewards"}
+                value={userDetails.rewards.toString()}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Dashboardcard
+                label={"Next Goal"}
+                value={userDetails.nextGoal.toString()}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Dashboardcard
+                label={"Referral Code"}
+                value={userDetails.referralToken}
+                referralLink={getUrl(userDetails.referralMessage)}
+              />
+            </Grid>
+          </Grid>
+          <Grid item style={{ display: "flex", justifyContent: "center" }}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: isDesktopOrLaptop ? 400 : 600,
+                width: isDesktopOrLaptop ? "90vw" : "80vw",
+              }}
+            >
+              <Box mt={2} mb={2} sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  style={{ color: "#000000" }}
+                >
+                  {"Profile Details"}
+                </Typography>
+              </Box>
+              <Divider />
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  p: 2,
+                }}
+              >
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: isDesktopOrLaptop
+                      ? "space-between"
+                      : "center",
+                  }}
+                >
+                  {/* <Box > */}
+                  <img
+                    src={userDetails.avatar}
+                    width={"250rem"}
+                    height={"250rem"}
+                  ></img>
+                  {isDesktopOrLaptop && <Divider orientation={"vertical"} />}
+                  {/* </Box> */}
+                </Grid>
+                <Grid item xs={12} md={8}>
+                  {/* <Paper
                     sx={{
                       p: 2,
                       display: "flex",
                       flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 240,
-                      borderRadius: 10,
+                      height: 295,
                     }}
-                  >
-                    <img
-                      src={userDetails.avatar}
-                      style={{ height: "30vh", width: "30vh" }}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} md={4} lg={4}>
-                  <Paper
+                  > */}
+                  <Grid
+                    container
+                    spacing={2}
                     sx={{
                       p: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                      height: 240,
-                      borderRadius: 10,
                     }}
                   >
-                    <CustomCard
-                      title={"HELLO"}
-                      keys={["First Name", "Last Name", "Mobile", "Email"]}
-                      values={[
-                        userDetails.firstName,
-                        userDetails.lastName,
-                        userDetails.phoneNumber,
-                        userDetails.email,
-                      ]}
+                    <Userlabel label={"Name"} value={userDetails.firstName} />
+                    <Userlabel
+                      label={"Mobile"}
+                      value={userDetails.phoneNumber}
                     />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} md={4} lg={4}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                      height: 240,
-                      borderRadius: 10,
-                    }}
-                  >
-                    <CustomCard
-                      title={"HELLO"}
-                      keys={["Rewards", "Next Goals", "Referral"]}
-                      values={[
-                        userDetails.rewards.toString(),
-                        userDetails.nextGoal.toString(),
-                        userDetails.referralToken,
-                      ]}
-                    />
-                  </Paper>
-                </Grid>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper
-                    sx={{ p: 2, display: "flex", flexDirection: "column" }}
-                  ></Paper>
+                    <Userlabel label={"Email"} value={userDetails.email} />
+                  </Grid>
+                  {/* </Paper> */}
                 </Grid>
               </Grid>
-            </Container>
-          </Box>
-        </Box>
-      </ThemeProvider>
+            </Paper>
+          </Grid>
+        </Paper>
+      </Grid>
     </Grid>
   );
 };

@@ -25,11 +25,10 @@ import { useHistory } from "react-router";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import { makeStyles } from "@mui/styles";
-
+import { createNotification } from "../../utils/notification";
 const useStyles = makeStyles({
   root: {
-    background:
-      "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
+    background: "linear-gradient(90deg, #37297e 10%, #ac42c2 90%)",
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
@@ -108,6 +107,13 @@ export default function VerifyEmailCard() {
       (!verifyEmailLoading && verifyEmailSuccess && isLogin != null) ||
       (!verifyEmailLoading && verifyEmailFailure)
     ) {
+      if (verifyEmailFailure) {
+        createNotification(
+          "Verification failed",
+          "Email verification failed.",
+          "danger"
+        );
+      }
       // Email verfication api done
       dispatch(emailVerificationClear());
     }
@@ -126,6 +132,16 @@ export default function VerifyEmailCard() {
       dispatch(emailVerificationCodeClear());
       history.push("/dashboard");
     } else if (!verifyEmailCodeLoading && verifyEmailCodeFailure) {
+      const pendingCount: number = 3 - parseInt(wrongEmailTokenCount);
+      var pendingCountmessage: string = "";
+      if (pendingCount > 0) {
+        pendingCountmessage = "You have " + pendingCount + " more attempts";
+      }
+      createNotification(
+        "Verification failed",
+        "Verfication code is invalid or expired." + pendingCountmessage,
+        "danger"
+      );
       // Email code verfication done failed case
       dispatch(emailVerificationCodeClear());
     }
@@ -134,6 +150,7 @@ export default function VerifyEmailCard() {
     verifyEmailCodeSuccess,
     verifyEmailCodeFailure,
     isLogin,
+    wrongEmailTokenCount,
   ]);
 
   // Callbacks for Resend email code.
@@ -142,6 +159,9 @@ export default function VerifyEmailCard() {
       (!resendEmailCodeLoading && resendEmailCodeSuccess) ||
       (!resendEmailCodeLoading && resendEmailCodeFailure)
     ) {
+      if (resendEmailCodeSuccess) {
+        createNotification("Verification code resent.", " ", "success");
+      }
       dispatch(resendEmailVerificationCodeClear());
     }
   }, [resendEmailCodeLoading, resendEmailCodeSuccess, resendEmailCodeFailure]);

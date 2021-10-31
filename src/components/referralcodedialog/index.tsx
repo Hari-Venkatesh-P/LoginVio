@@ -11,6 +11,7 @@ import { validateReferalToken } from "../../store/api";
 import { styled } from "@mui/material/styles";
 
 import { makeStyles } from "@mui/styles";
+import { createNotification } from "../../utils/notification";
 
 const useStyles = makeStyles({
   root: {
@@ -50,6 +51,7 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
       setInvalidReferralCode(false);
       props.setReferralCode(data.referredCodeKey);
       props.closeModal();
+      createNotification("Referral code applied", " ", "success");
     } else {
       setInvalidReferralCode(true);
     }
@@ -78,6 +80,7 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
         onClose={() => {
           props.closeModal();
           setValue("referredCodeKey", "");
+          setInvalidReferralCode(false);
         }}
       >
         <DialogContent>
