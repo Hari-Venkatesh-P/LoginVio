@@ -1,3 +1,5 @@
+// Component represents the Sign up Card 
+
 import * as React from "react";
 import { useHistory } from "react-router";
 import { styled } from "@mui/material/styles";
@@ -77,6 +79,7 @@ export default function SignUpCard(props: SignUpCardProps) {
 
   const { handleSubmit, control,  setValue } = useForm();
 
+  // Handles the User Sign up
   const onSubmit = async (data: any) => {
     let payload: SignUpPayLoad = {
       firstName: data.firstName,

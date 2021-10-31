@@ -1,3 +1,5 @@
+// Component which represents Dialog for getting Referral code from user
+
 import * as React from "react";
 import { AxiosResponse } from "axios";
 import Button from "@mui/material/Button";
@@ -44,6 +46,7 @@ export default function ReferralCodeDialog(props: ReferralCodeDialogProps) {
   const [invalidReferralCode, setInvalidReferralCode] =
     React.useState<boolean>(false);
 
+  // Function which validates the REFERRAL CODE
   const onSubmit = async (data: any) => {
     let res: AxiosResponse = await validateReferalToken(data.referredCodeKey);
     if (res.status == 200 && res.data && res.data.success) {

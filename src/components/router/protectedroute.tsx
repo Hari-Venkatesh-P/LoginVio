@@ -1,3 +1,4 @@
+// Represents the Protected route 
 import React, { useMemo } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";

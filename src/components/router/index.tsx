@@ -1,3 +1,4 @@
+// Represents Application router
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LoginScreen from "../../pages/login/index";
 import DashboardScreen from "../../pages/dashboard/index";

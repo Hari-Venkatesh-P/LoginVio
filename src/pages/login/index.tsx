@@ -31,6 +31,7 @@ const Login = () => {
     string | null
   >(null);
 
+  // Handles the user with INVITE CODE
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.has("invite")) {

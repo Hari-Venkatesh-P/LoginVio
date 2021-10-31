@@ -42,6 +42,7 @@ const Dashboard = () => {
     query: "(min-width: 1224px)",
   });
 
+  // Prompts user before reload.
   useEffect(() => {
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
@@ -49,6 +50,7 @@ const Dashboard = () => {
     };
   }, []);
 
+  // Event listender for reload
   const handleBeforeUnload = (e: any) => {
     e.preventDefault();
     const message =
@@ -66,6 +68,7 @@ const Dashboard = () => {
 
   const history = useHistory();
 
+  // handles logout
   const handleLogout = async () => {
     const headersMap: AxiosRequestHeaders = {
       Authorization: `Bearer ${getItemFromLocalStorage(

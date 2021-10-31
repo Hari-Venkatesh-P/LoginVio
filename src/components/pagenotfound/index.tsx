@@ -1,4 +1,4 @@
-import React from "react";
+// Screen component which represents the 404. Unmatched Route in the application
 import Grid from "@mui/material/Grid";
 import CustomAppBar from "../appbar";
 

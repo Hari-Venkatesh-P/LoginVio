@@ -1,3 +1,4 @@
+// Common component which represents the card diplayed in dashboard
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";

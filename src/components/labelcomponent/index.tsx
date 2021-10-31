@@ -1,3 +1,5 @@
+// Common component which represents the key value diplayed in dashboard
+
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";

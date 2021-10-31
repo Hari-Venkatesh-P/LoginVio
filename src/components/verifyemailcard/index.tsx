@@ -1,3 +1,5 @@
+// Component represents the Email Verification Card 
+
 import * as React from "react";
 import { useMemo } from "react";
 import { useHistory } from "react-router";
@@ -178,6 +180,7 @@ export default function VerifyEmailCard() {
 
   const { handleSubmit, control, getValues, setValue } = useForm();
 
+  // Handles the Submit for Email Verification Form
   const onSubmit = (data: any) => {
     if (isVerifyCode) {
       const payload: VerifyEmailCodePayload = {
@@ -191,14 +194,17 @@ export default function VerifyEmailCard() {
     }
   };
 
+  // Calls Verify Email API
   const verifyEmail = (data: VerifyEmailPayload) => {
     dispatch(emailVerificationRequest(data));
   };
 
+  // Calls Verify Email Code API
   const verifyEmailCode = (data: VerifyEmailCodePayload) => {
     dispatch(emailVerificationCodeRequest(data));
   };
 
+  // Calls Resend Email Code API
   const resendEmailCode = () => {
     if (getValues("email").length > 0) {
       const data: ResendEmailCodePayload = {
